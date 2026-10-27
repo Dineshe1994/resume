@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import { experience, projects, skills, socialLinks } from '@/data/portfolio';
 
-const resumeUrl = '/resume/resumeDinesh.pdf';
+const resumeUrl = `${import.meta.env.BASE_URL}resume/resumeDinesh.pdf`;
 
 function SectionHeading({ eyebrow, title, description }: { eyebrow: string; title: string; description?: string }) {
   return <div className="section-heading"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2>{description && <p className="section-description">{description}</p>}</div>;
@@ -25,8 +25,16 @@ function App() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    const subject = encodeURIComponent(String(values.get('subject') ?? ''));
+    const body = encodeURIComponent(
+      `Name: ${values.get('name')}\nEmail: ${values.get('email')}\n\n${values.get('message')}`,
+    );
+
+    window.location.href = `mailto:dineshgokulan1994@gmail.com?subject=${subject}&body=${body}`;
     setSent(true);
-    event.currentTarget.reset();
+    form.reset();
   };
 
   const closeMenu = () => setMenuOpen(false);
@@ -76,7 +84,7 @@ function App() {
 
         <section className="services-section"><div className="section-shell section-block"><SectionHeading eyebrow="07 — What I can build" title="Useful, thoughtful digital products." /><div className="service-grid"><div className="service-card"><Globe2 size={21} /><h3>Frontend development</h3><p>React and Vue applications, responsive websites, and component libraries.</p></div><div className="service-card"><Code2 size={21} /><h3>UI development</h3><p>Pixel-aware interfaces, accessibility, design systems, and clean responsive layouts.</p></div><div className="service-card"><Server size={21} /><h3>API integration</h3><p>REST APIs, Axios, authentication flows, and clear error handling.</p></div><div className="service-card"><Layers3 size={21} /><h3>Full-stack growth</h3><p>Node.js, Express, MongoDB, and CRUD applications as I expand the stack.</p></div></div></div></section>
 
-        <section id="contact" className="section-shell section-block contact-section"><div className="contact-intro"><SectionHeading eyebrow="08 — Contact" title="Let’s build something great." description="I’m open to frontend development opportunities, full-stack projects, and interesting engineering challenges." /><div className="contact-details"><a href={socialLinks.email}><Mail size={17} />dineshgokulan1994@gmail.com</a><a href={socialLinks.linkedin} target="_blank" rel="noreferrer"><Linkedin size={17} /> LinkedIn profile</a><a href={socialLinks.github} target="_blank" rel="noreferrer"><Github size={17} /> GitHub profile</a></div></div><form className="contact-form" onSubmit={handleSubmit}><label>Name<input required name="name" placeholder="Your name" /></label><label>Email<input required type="email" name="email" placeholder="you@example.com" /></label><label>Subject<input required name="subject" placeholder="How can I help?" /></label><label>Message<textarea required name="message" rows={5} placeholder="Tell me a little about the opportunity..." /></label><button className="button button-primary" type="submit">{sent ? <>Message ready to send <Check size={16} /></> : <>Send message <Send size={16} /></>}</button><p className="form-note">This form is ready to connect to <code>POST /api/contact</code>.</p></form></section>
+        <section id="contact" className="section-shell section-block contact-section"><div className="contact-intro"><SectionHeading eyebrow="08 — Contact" title="Let’s build something great." description="I’m open to frontend development opportunities, full-stack projects, and interesting engineering challenges." /><div className="contact-details"><a href={socialLinks.email}><Mail size={17} />dineshgokulan1994@gmail.com</a><a href={socialLinks.linkedin} target="_blank" rel="noreferrer"><Linkedin size={17} /> LinkedIn profile</a><a href={socialLinks.github} target="_blank" rel="noreferrer"><Github size={17} /> GitHub profile</a></div></div><form className="contact-form" onSubmit={handleSubmit}><label>Name<input required name="name" placeholder="Your name" /></label><label>Email<input required type="email" name="email" placeholder="you@example.com" /></label><label>Subject<input required name="subject" placeholder="How can I help?" /></label><label>Message<textarea required name="message" rows={5} placeholder="Tell me a little about the opportunity..." /></label><button className="button button-primary" type="submit">{sent ? <>Email draft opened <Check size={16} /></> : <>Open email app <Send size={16} /></>}</button><p className="form-note">Your email app will open with a draft. No data is sent from this site.</p></form></section>
       </main>
 
       <footer className="footer"><div className="section-shell footer-inner"><div><a className="brand" href="#home"><span className="brand-mark">D</span><span>Dinesh</span></a><p>Frontend Developer building useful things for the web.</p></div><div className="footer-links"><a href={socialLinks.github} target="_blank" rel="noreferrer"><Github size={16} /> GitHub</a><a href={socialLinks.linkedin} target="_blank" rel="noreferrer"><Linkedin size={16} /> LinkedIn</a><a href={socialLinks.email}><Mail size={16} /> Email</a><a href={resumeUrl} download>Download resume <ArrowDownRight size={15} /></a></div><div className="footer-bottom"><span>© 2026 Dinesh. All rights reserved.</span><span>Built with React.js & TypeScript</span></div></div></footer>
